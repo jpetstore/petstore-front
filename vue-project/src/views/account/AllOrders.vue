@@ -1,11 +1,13 @@
-<script setup>
+<script>
 import {defineComponent} from 'vue';
 import { ref } from 'vue';
 import HeaderComponent from '../common/header.vue';
 import FooterComponent from '../common/footer.vue';
 
-export default {
-  mounted() {
+export default defineComponent({
+    name: "AllOrders",
+    components:{HeaderComponent,FooterComponent},
+    mounted() {
     onMounted(() => {
       //挂载函数，页面加载完成之后调用
     var arr = document.getElementsByClassName("refundBtn")
@@ -19,19 +21,16 @@ export default {
                 }
             }
         }
-    });
-  },
-};
-export default defineComponent({
-    name: "AllOrders",
-    components:{HeaderComponent,FooterComponent}
+        });
+    }
 })
 
  </script>
 
 
 <template>
-
+<!DOCTYPE html>
+<html lang="en">
 <HeaderComponent/>      <!--导入header-->
 
 <div id = "BackLink">
@@ -62,6 +61,7 @@ export default defineComponent({
     </table>
 </div>
 <FooterComponent/> 
+</html>
 </template>
 <style scoped>
   @import "@/assets/css/jpetstore.css";
