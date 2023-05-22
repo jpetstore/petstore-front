@@ -4,9 +4,11 @@ import {defineComponent} from 'vue';
 export default defineComponent({
     name: "index"
 })
+
 </script>
 
 <template>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
