@@ -12,6 +12,24 @@ const router = createRouter({
                 next()
             }
         },
+        // {
+        //     path:'/catalog/test',
+        //     name:'test',
+        //     component : () => import('../views/catalog/test.vue'),
+        //     beforeEnter : (to, from, next) => {
+        //         document.querySelector('html').style.background = '#000'
+        //         next()
+        //     }
+        // },
+        {
+            path:'/catalog/SearchProduct',
+            name:'searchProduct',
+            component : () => import('../views/catalog/SearchProduct.vue'),
+            beforeEnter : (to, from, next) => {
+                document.querySelector('html').style.background = '#d6d9c5'
+                next()
+            }
+        },
 
 
 

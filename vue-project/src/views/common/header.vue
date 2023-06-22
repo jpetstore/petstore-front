@@ -87,23 +87,22 @@ export default defineComponent({
         <div id="Menu" >
             <div id="MenuContent" >
 
-                <a href="/cart/viewCart"><img align="middle" name="img_cart" src="../../assets/images/cart.gif" /></a>
-
+                <a href="/cart/viewCart"><img align="middle" name="img_cart" src="../../assets/images/cart.gif" />&nbsp;</a>
+                
                 <img align="middle" src="../../assets/images/separator.gif" />
 
                 <!-- 如果没登陆，显示Sign In按钮 -->
-                <a id="signin" href="/account/viewSignin" v-if="!isLogin">Sign In</a>
-
+                <a id="signin" href="/account/viewSignin" v-if="!isLogin"> Sign In </a>
                 <!-- 如果登陆了，显示Sign Out按钮 -->
-                <a id="signout" href="/account/signout" v-if="isLogin">Sign Out </a>
+                <a id="signout" href="/account/signout" v-if="isLogin"> Sign Out </a>
 
                 <img align="middle" src="../../assets/images/separator.gif" />
 
-                <a href="/account/viewMyAccount">My Account</a>
+                <a href="/account/viewMyAccount"> My Account </a>
 
                 <img align="middle" src="../../assets/images/separator.gif" />
 
-                <a href="/account/refresh">Refresh</a>
+                <a href="/account/refresh"> Refresh </a>
 
                 <img align="middle" src="../../assets/images/separator.gif" />
 
@@ -126,15 +125,34 @@ export default defineComponent({
 
         <div id="QuickLinks">
             <img src="../../assets/images/separator.gif"/>
-            <img src="../../assets/images/separator.gif"/>
-            <a v-if="allCategoryLists.size == 0">No Categor</a>
+            <span>
+                <a href="/catalog/categories/BIRDS"> BIRDS </a>
+                <img src="../../assets/images/separator.gif"/>
+            </span>
+            <span>
+                <a href="/catalog/categories/CATS"> CATS </a>
+                <img src="../../assets/images/separator.gif"/>
+            </span>
+            <span>
+                <a href="/catalog/categories/DOGS"> DOGS </a>
+                <img src="../../assets/images/separator.gif"/>
+            </span>
+            <span>
+                <a href="/catalog/categories/FISH"> FISH </a>
+                <img src="../../assets/images/separator.gif"/>
+            </span>
+            <span>
+                <a href="/catalog/categories/REPTILES"> REPTILES </a>
+                <img src="../../assets/images/separator.gif"/>
+            </span>
+            <!-- <a v-if="allCategoryLists.size == 0">No Categor</a>
             <span v-if="allCategoryLists.size > 0" >
                 <span v-for="category in allCategoryLists">
                     <a v-bind:href="`/catalog/viewCategory/${category.id}`">{{ category.id }}</a>
                     <img src="../../assets/images/separator.gif"/>
                 </span>
                 <img src="../../assets/images/separator.gif"/>
-            </span>
+            </span> -->
         </div>
 
     </div>

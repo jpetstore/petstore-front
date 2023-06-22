@@ -19,7 +19,7 @@ export default defineComponent({
 <div id="Content">
     <h2>Welcome to MyPetStore </h2>
 
-    <p><a href="/catalog/main">Enter the Store</a></p>
+    <p><a href="/catalog/test">Enter the Store</a></p>
 
     <p><sub>Copyright Central South University </sub></p>
 
