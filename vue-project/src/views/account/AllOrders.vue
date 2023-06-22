@@ -1,36 +1,63 @@
 <script>
-import {defineComponent} from 'vue';
-import { ref } from 'vue';
+
 import HeaderComponent from '../common/header.vue';
 import FooterComponent from '../common/footer.vue';
+import axios from "axios";
 
-export default defineComponent({
-    name: "AllOrders",
+window.onload = function (){
+                            var arr = document.getElementsByClassName("refundBtn")
+                            for (var i=0; i<arr.length; i++){
+                                arr[i].onclick = function (){
+                                    var msg = prompt("若确认申请退款，请提交理由：")
+                                    if(msg != null){
+                                        var orderid = this.id;
+                                        alert("退款申请已提交")
+                                        location.href = "/order/refundOrder?orderid=" + orderid + "&msg=" + msg
+                                    }
+                                }
+                            }
+                        }
+
+export default {
+
+  name: "AllOrders",
     components:{HeaderComponent,FooterComponent},
-    mounted() {
-    onMounted(() => {
-      //挂载函数，页面加载完成之后调用
-    var arr = document.getElementsByClassName("refundBtn")
-    for (var i=0; i<arr.length; i++){
-        arr[i].onclick = function (){
-            var msg = prompt("若确认申请退款，请提交理由：")
-            if(msg != null){
-                var orderid = this.id;
-                alert("退款申请已提交")
-                location.href = "/order/refundOrder?orderid=" + orderid + "&msg=" + msg
-                }
+    data(){
+        return{
+            orderList    :   []
+        };
+    },
+    async created(){
+        console.log('created');
+        const re = await this.fetchData();//promise对象
+        console.log(re.data);
+        this.orderList = re.data;
+    },
+
+    methods:{
+        async fetchData(){
+            console.log("111111111")
+            try{
+                const response = await axios.get('http://localhost:8090/order/getAllOrder'); 
+                      
+                 return response.data;
+            }catch(error){
+                console.log(error);
+                return 0;
             }
         }
-        });
-    }
-})
+    }   
+
+
+
+
+};
 
  </script>
 
 
 <template>
-<!DOCTYPE html>
-<html lang="en">
+
 <HeaderComponent/>      <!--导入header-->
 
 <div id = "BackLink">
@@ -61,7 +88,6 @@ export default defineComponent({
     </table>
 </div>
 <FooterComponent/> 
-</html>
 </template>
 <style scoped>
   @import "@/assets/css/jpetstore.css";

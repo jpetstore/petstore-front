@@ -1,4 +1,37 @@
+<script>
+
+export default {
+    name: "ForgetPassword",
+    data(){
+        return{
+            user :   []
+        };
+    },
+    async created(){
+        console.log('created');
+        const re = await this.fetchData();//promise对象
+        this.user = re.data;
+    },
+    methods:{
+        async fetchData(){
+            console.log()
+            try{
+                const response = await axios.get('http://localhost:8090/account/editAccount');
+                return response.data;
+            }catch(error){
+                console.log(error);
+                return 0;
+            }
+        }
+    }
+}
+
+
+
+</script>
+
 <template>
+    
 <div style="display: none" class="shadow" id="shadow"></div>
 <div style="display: none" id="login-box" class="login-box">
     <form id="FGTPSWform" >
@@ -20,7 +53,7 @@
 
             <tr>
                 <td>PhoneNumber:</td>
-                <td><input type="text" name="phoneNumber"required="required"></td>
+                <td><input type="text" name="phoneNumber" required="required"></td>
             </tr>
 
 
@@ -43,7 +76,6 @@
 <div style="display: none" id="login-box-email" class="login-box">
     <form id="FGTPSWformMAIL" >
         <table align="center">
-
 
             <tr>
                 <td><h3>We will send a new password to you</h3></td>

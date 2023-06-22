@@ -1,12 +1,39 @@
-
 <script>
 import HeaderComponent from '../common/header.vue';
 import FooterComponent from '../common/footer.vue';
+import axios from "axios";
 
-export default defineComponent({
+
+export default {
     name: "MyAccount",
-    components:{HeaderComponent,FooterComponent}
-})
+    components:{HeaderComponent,FooterComponent},
+    data(){
+        return{
+            user :   []
+        };
+    },
+    async created(){
+        console.log('created');
+        const re = await this.fetchData();//promise对象
+        console.log(re);
+        this.user = re.data;
+    },
+    methods:{
+        async fetchData(){
+            console.log()
+            try{
+                axios.defaults.withCredentials = true;
+                const response = await axios.get('http://localhost:8090/account/get_loginUser_info');
+                // console.log(response)
+                // console.log(response.data)
+                return response.data;
+            }catch(error){
+                console.log(error);
+                return 0;
+            }
+        }
+    }
+}
 
 
 
@@ -34,7 +61,7 @@ export default defineComponent({
                 Username:
             </td>
             <td >
-                <input type="text" name="username" id="username" readonly="readonly" value="user.username">
+                <input type="text" name="username" id="username" readonly="readonly" v-model="user.id">
             </td>
         </tr>
         <tr>
@@ -42,7 +69,7 @@ export default defineComponent({
                 New Password:
             </td>
             <td >
-                <input type="password" name="password" id="password" value="user.password">
+                <input type="password" name="password" id="password" v-model="user.password">
             </td>
         </tr>
         <tr>
@@ -55,7 +82,7 @@ export default defineComponent({
                 First Name:
             </td>
             <td >
-                <input type="text" name="firstname" id="firstname" value="user.firstname">
+                <input type="text" name="firstname" id="firstname" v-model="user.firstname">
             </td>
         </tr>
         <tr>
@@ -63,7 +90,7 @@ export default defineComponent({
                 Last Name:
             </td>
             <td >
-                <input type="text" name="lastname" id="lastname" value="user.lastname">
+                <input type="text" name="lastname" id="lastname" v-model="user.lastname">
             </td>
         </tr>
         <tr>
@@ -71,7 +98,7 @@ export default defineComponent({
                 Email:
             </td>
             <td >
-                <input type="email" name="email" id="email" value="user.email">
+                <input type="email" name="email" id="email" v-model="user.email">
             </td>
         </tr>
         <tr>
@@ -79,7 +106,7 @@ export default defineComponent({
                 Phone:
             </td>
             <td >
-                <input type="text" name="phone" id="phone" value="user.phone">
+                <input type="text" name="phone" id="phone" v-model="user.phone">
             </td>
         </tr>
         <tr>
@@ -87,7 +114,7 @@ export default defineComponent({
                 Address1:
             </td>
             <td >
-                <input type="text" name="address1" id="address1" value="user.address1">
+                <input type="text" name="address1" id="address1" v-model="user.address1">
             </td>
         </tr>
         <tr>
@@ -95,7 +122,7 @@ export default defineComponent({
                 Address2:
             </td>
             <td >
-                <input type="text" name="address2" id="address2" value="user.address2">
+                <input type="text" name="address2" id="address2" v-model="user.address2">
             </td>
         </tr>
         <tr>
@@ -103,7 +130,7 @@ export default defineComponent({
                 City:
             </td>
             <td >
-                <input type="text" name="city" id="city" value="{{user.city}}">
+                <input type="text" name="city" id="city" v-model="user.city">
             </td>
         </tr>
         <tr>
@@ -111,7 +138,7 @@ export default defineComponent({
                 Stste:
             </td>
             <td >
-                <input type="text" name="state" id="state" value="user.state">
+                <input type="text" name="state" id="state" v-model="user.state">
             </td>
         </tr>
         <tr>
@@ -119,7 +146,7 @@ export default defineComponent({
                 Zip:
             </td>
             <td >
-                <input type="text" name="zip" id="zip" value="{{user.zip}}">
+                <input type="text" name="zip" id="zip" v-model="user.zip">
             </td>
         </tr>
         <tr>
@@ -127,7 +154,7 @@ export default defineComponent({
                 Country:
             </td>
             <td >
-                <input type="text" name="country" id="country" value="user.country">
+                <input type="text" name="country" id="country" v-model="user.country">
             </td>
         </tr>
         <tr>
@@ -140,15 +167,15 @@ export default defineComponent({
                 Language Preference:
             </td>
             <td>
-                <select name="languagepre"  v-if="user.languagepre.equals('English')">
+                <select name="languagepre"  v-if="user.languagepre==='English'">
                     <option selected="selected" value="English">English</option>-->
                     <option value="Janpenese">Janpenese</option>-->
                 </select>
-                <select name="languagepre" v-if="user.languagepre.equals('Janpenese')">
+                <select name="languagepre" v-if="user.languagepre==='Janpenese'">
                     <option value="English">English</option>
                     <option selected="selected" value="Janpenese">Janpenese</option>
                 </select>
-                <select name="languagepre" v-if="!(user.languagepre.equals('English')||user.languagepre.equals('Janpenese'))">
+                <select name="languagepre" v-if="!(user.languagepre==='English'||user.languagepre==='Janpenese')">
                     <option value="English">English</option>
                     <option selected="selected" value="Janpenese">Janpenese</option>
                 </select>
@@ -164,3 +191,6 @@ export default defineComponent({
 
 <FooterComponent/> 
 </template>
+<style scoped>
+  @import "@/assets/css/jpetstore.css";
+</style>
