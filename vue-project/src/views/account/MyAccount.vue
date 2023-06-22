@@ -9,16 +9,56 @@ export default {
     components:{HeaderComponent,FooterComponent},
     data(){
         return{
-            user :   []
+            userInfo :   [],
+            reminder: undefined
         };
     },
     async created(){
         console.log('created');
         const re = await this.fetchData();//promise对象
         console.log(re);
-        this.user = re.data;
+        this.reminder=re.msg;
+        this.userInfo = re.data;
     },
     methods:{
+         submitForm(event) {
+        event.preventDefault();
+        let userInfo = {
+            password    :   this.userInfo.password,
+            firstname   :   this.userInfo.firstname,
+            lastname    :   this.userInfo.lastname,
+            email       :   this.userInfo.email,
+            phone       :   this.userInfo.phone,
+            address1       :   this.userInfo.address1,
+            address2       :   this.userInfo.address2,
+            city        :   this.userInfo.city,
+            state       :   this.userInfo.state,
+            zip         :   this.userInfo.zip,
+            country     :   this.userInfo.country,
+            languagepre :   this.userInfo.languagepre
+            
+        }
+        console.log(userInfo)
+        axios.post('http://localhost:8090/account/editAccount',userInfo,{
+            headers:{
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+            .then(response=>{
+                if(response.data.status == 0){
+                    // router.push('/catalog/main')
+                    this.$router.push('/account/MyAccount')
+                    console.log("change successfully")
+                }else{
+                    // this.$router.push('/account/register')
+                    this.$router.push('/account/MyAccount')
+                    console.log("fail change")
+                }
+            })
+            .catch(error=>{
+            //    router.push('/catalog/main');
+            })
+        },
         async fetchData(){
             console.log()
             try{
@@ -49,9 +89,9 @@ export default {
     <a href="/account/allOrders">View All Orders</a>
 </div>
 
-<font color="red" text="message">错误提示message</font>
+<font color="red" v-model="reminder"></font>
 
-<form action="/account/saveAccount" method="post">
+<form action="http://localhost:8090/account/editAccount" @submit="submitForm" method="post">
     <table>
         <tr>
             <td> <h3 align="center">User Information</h3></td>
@@ -61,7 +101,7 @@ export default {
                 Username:
             </td>
             <td >
-                <input type="text" name="username" id="username" readonly="readonly" v-model="user.id">
+                <input type="text" name="username" id="username" readonly="readonly" v-model="userInfo.id">
             </td>
         </tr>
         <tr>
@@ -69,7 +109,7 @@ export default {
                 New Password:
             </td>
             <td >
-                <input type="password" name="password" id="password" v-model="user.password">
+                <input type="password" name="password" id="password" v-model="userInfo.password">
             </td>
         </tr>
         <tr>
@@ -82,7 +122,7 @@ export default {
                 First Name:
             </td>
             <td >
-                <input type="text" name="firstname" id="firstname" v-model="user.firstname">
+                <input type="text" name="firstname" id="firstname" v-model="userInfo.firstname">
             </td>
         </tr>
         <tr>
@@ -90,7 +130,7 @@ export default {
                 Last Name:
             </td>
             <td >
-                <input type="text" name="lastname" id="lastname" v-model="user.lastname">
+                <input type="text" name="lastname" id="lastname" v-model="userInfo.lastname">
             </td>
         </tr>
         <tr>
@@ -98,7 +138,7 @@ export default {
                 Email:
             </td>
             <td >
-                <input type="email" name="email" id="email" v-model="user.email">
+                <input type="email" name="email" id="email" v-model="userInfo.email">
             </td>
         </tr>
         <tr>
@@ -106,7 +146,7 @@ export default {
                 Phone:
             </td>
             <td >
-                <input type="text" name="phone" id="phone" v-model="user.phone">
+                <input type="text" name="phone" id="phone" v-model="userInfo.phone">
             </td>
         </tr>
         <tr>
@@ -114,7 +154,7 @@ export default {
                 Address1:
             </td>
             <td >
-                <input type="text" name="address1" id="address1" v-model="user.address1">
+                <input type="text" name="address1" id="address1" v-model="userInfo.address1">
             </td>
         </tr>
         <tr>
@@ -122,7 +162,7 @@ export default {
                 Address2:
             </td>
             <td >
-                <input type="text" name="address2" id="address2" v-model="user.address2">
+                <input type="text" name="address2" id="address2" v-model="userInfo.address2">
             </td>
         </tr>
         <tr>
@@ -130,7 +170,7 @@ export default {
                 City:
             </td>
             <td >
-                <input type="text" name="city" id="city" v-model="user.city">
+                <input type="text" name="city" id="city" v-model="userInfo.city">
             </td>
         </tr>
         <tr>
@@ -138,7 +178,7 @@ export default {
                 Stste:
             </td>
             <td >
-                <input type="text" name="state" id="state" v-model="user.state">
+                <input type="text" name="state" id="state" v-model="userInfo.state">
             </td>
         </tr>
         <tr>
@@ -146,7 +186,7 @@ export default {
                 Zip:
             </td>
             <td >
-                <input type="text" name="zip" id="zip" v-model="user.zip">
+                <input type="text" name="zip" id="zip" v-model="userInfo.zip">
             </td>
         </tr>
         <tr>
@@ -154,7 +194,7 @@ export default {
                 Country:
             </td>
             <td >
-                <input type="text" name="country" id="country" v-model="user.country">
+                <input type="text" name="country" id="country" v-model="userInfo.country">
             </td>
         </tr>
         <tr>
@@ -167,15 +207,15 @@ export default {
                 Language Preference:
             </td>
             <td>
-                <select name="languagepre"  v-if="user.languagepre==='English'">
+                <select name="languagepre"  v-if="userInfo.languagepre==='English'">
                     <option selected="selected" value="English">English</option>-->
                     <option value="Janpenese">Janpenese</option>-->
                 </select>
-                <select name="languagepre" v-if="user.languagepre==='Janpenese'">
+                <select name="languagepre" v-if="userInfo.languagepre==='Janpenese'">
                     <option value="English">English</option>
                     <option selected="selected" value="Janpenese">Janpenese</option>
                 </select>
-                <select name="languagepre" v-if="!(user.languagepre==='English'||user.languagepre==='Janpenese')">
+                <select name="languagepre" v-if="!(userInfo.languagepre==='English'||userInfo.languagepre==='Janpenese')">
                     <option value="English">English</option>
                     <option selected="selected" value="Janpenese">Janpenese</option>
                 </select>

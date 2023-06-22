@@ -44,7 +44,7 @@ const router = createRouter({
         },
         {
             path:'/account/Register',
-            name:'AllOrders',
+            name:'Register',
             component : () => import('../views/account/Register.vue'),
             beforeEnter : (to, from, next) => {
                 document.querySelector('html').style.background = '#d6d9c5'

@@ -64,6 +64,7 @@ export default {
           });
     },
     loadCaptchaImage() {
+      axios.defaults.withCredentials = true;
       axios
           .get('http://localhost:8090/account/authCode', { responseType: 'arraybuffer' })
           .then(response => {
@@ -85,6 +86,7 @@ export default {
     updateCaptcha() {
       this.captchaImage = ''; // 清空验证码图片
       this.captchaLinkClicked = true;
+      axios.defaults.withCredentials = true;
       axios
           .get('http://localhost:8090/account/authCode',{ responseType: 'arraybuffer' })
           .then(response => {
@@ -183,7 +185,7 @@ $('#confirmFGTPSWMAIL').click(function (){
 $('#confirmFGTPSW').click(function (){
 
     var serializeArray = $("#FGTPSWform").serializeArray();
-    console.log(55666);
+    console.log(serializeArray);
     $.ajax(
         {
 
