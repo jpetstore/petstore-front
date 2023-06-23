@@ -166,7 +166,7 @@ $('#confirmFGTPSWMAIL').click(function (){
             type    :"post",
             data    :serializeArray,
             success :function (data){
-                alert(data);
+                alert(data.msg);
 
                 if(data==="新密码已经发送至邮箱，请注意查收"){
                     console.log(data);
