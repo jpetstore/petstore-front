@@ -47,15 +47,11 @@ export default {
             .then(response=>{
                 if(response.data.status == 0){
                     // router.push('/catalog/main')
-                    
-                    this.$router.go(0)
-                    // this.$router.push('/account/MyAccount')
-                  //  this.$router.push('/catalog/main')
+                    this.$router.push('/account/MyAccount')
                     console.log("change successfully")
                 }else{
                     // this.$router.push('/account/register')
-                    // this.$router.push('/account/MyAccount')
-                    this.$router.go(0)
+                    this.$router.push('/account/MyAccount')
                     console.log("fail change")
                 }
             })

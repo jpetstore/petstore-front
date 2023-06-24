@@ -37,8 +37,7 @@ export default {
                                        alert("退款申请已提交:"+orderid);
                                   
                                       axios.get("http://localhost:8090/order/refundOrder?orderid=" + orderid + "&msg=" + msg); 
-                                      this.$router.go(0)//刷新界面
-                                    //   this.$router.replace({ path:'/empty' })
+                                      this.$router.push('/account/MyAccount')
                                    }
                                }
                            }

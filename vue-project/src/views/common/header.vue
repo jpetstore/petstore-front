@@ -1,17 +1,22 @@
 <script>
 import {defineComponent} from 'vue';
 import axios from 'axios'; // 导入 axios 库（需要先安装）
+import router from "@/router";
+import $ from 'jquery';
 
 export default defineComponent({
     name: "header",
     data() {
         return {
+            session: null,
             isLogin: false,
             form: {
-                // 表单搜索的内容，初始值赋值为空
-                product: ""
+                keyword: ""
             },
-            allCategoryLists: ""
+            allCategoryLists: "",
+            userInfo :   [],
+            signIn: " Sign In ",
+            username: ""
         };
     },
     // 在组件创建时发送请求获取数据
@@ -24,32 +29,62 @@ export default defineComponent({
         },
         fetchData() {
             // 发送请求到后端获取数据，判断登录是否成功，如果成功，将isLogin赋值为true，并传输username
-            axios.get('/api/login')
+            axios.get('http://localhost:8090/account/get_loginUser_info')
                 .then(response => {
+                    this.userInfo = response.data;
+                    if(this.userInfo.status == 0){
+                        this.isLogin = true;
+                        console.log(this.isLogin+"!!!");
+                    }
                     // 请求成功，处理后端返回的数据
-                    this.isLogin = response.data.isLogin;
-                    this.username = response.data.username;
+                    this.username = response.data.data.id;
                 })
                 .catch(error => {
                     // 请求失败，处理错误
                     console.error(error);
                 });
         },
-        submitSearch() {
-            // 发送请求到后端传输数据，并将表单信息（form.product）传输给后端
-            axios.post('/api/search', this.form)
+        signOut(){
+            axios.get('http://localhost:8090/account/signout')
                 .then(response => {
-                // 请求成功处理
-                // 跳转到第二个界面，传递搜索结果
-                    this.$router.push({
-                    name: '/catalog/SearchProduct',
-                    params: { products: response.data }
-                    });
+                    this.msg = response.msg;
+                    this.isLogin = false;
                 })
                 .catch(error => {
+                    // 请求失败，处理错误
+                    console.error(error);
+                });
+        },
+        submitSearch(event) {
+            axios.defaults.withCredentials = true;
+            // event.preventDefault();
+            // 发送请求到后端传输数据，并将表单信息（form.product）传输给后端
+            axios
+            .post('http://localhost:8090/catalog/search', {
+                keyword: this.form.keyword
+            },{
+                headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            })
+            .then(response => {
+                // 请求成功处理
+                // 跳转到第二个界面，传递搜索结果
+                console.log(response.data);
+                this.$router.push({
+                    path: '/catalog/searchProduct',
+                    query: { products: JSON.stringify(response.data) }
+                });
+            })
+            .catch(error => {
                 // 请求失败处理
                 console.error(error);
             });
+        },
+    },
+    computed:{
+        refreshPage() {
+            return window.location.href; // 刷新当前页面
         }
     }
 })
@@ -92,17 +127,17 @@ export default defineComponent({
                 <img align="middle" src="../../assets/images/separator.gif" />
 
                 <!-- 如果没登陆，显示Sign In按钮 -->
-                <a id="signin" href="/account/viewSignin" v-if="!isLogin"> Sign In </a>
+                <a id="signin" href="/account/Signin" v-if="!isLogin"> Sign In </a>
                 <!-- 如果登陆了，显示Sign Out按钮 -->
-                <a id="signout" href="/account/signout" v-if="isLogin"> Sign Out </a>
+                <a id="signout" href="/catalog/main" v-if="isLogin" @click="signOut"> Sign Out </a>
 
                 <img align="middle" src="../../assets/images/separator.gif" />
 
-                <a href="/account/viewMyAccount"> My Account </a>
+                <a href="/account/MyAccount"> My Account </a>
 
                 <img align="middle" src="../../assets/images/separator.gif" />
 
-                <a href="/account/refresh"> Refresh </a>
+                <a :href="refreshPage"> Refresh </a>
 
                 <img align="middle" src="../../assets/images/separator.gif" />
 
@@ -113,10 +148,10 @@ export default defineComponent({
         <div id="Search">
             <div id="SearchContent">
                 <!-- 将submit按钮点击事件设置好 -->
-                <form @submit="submitSearch">
-                    <input type="text" v-model="form.product" size="14"/>
-                    <input type="submit" name="searchProducts" value="Search"/>
-                    <font color="black" v-if="!isLogin && username">{{ username }}未登录</font>
+                <form>
+                    <input id="searchbar" type="text" v-model="form.keyword" size="14"/>
+                    <input type="button" name="searchProducts" value="Search" @click="submitSearch"/>
+                    <font color="black" v-if="isLogin && username!=null">用户名：{{ username }}</font>
                     <font color="black" v-if="!isLogin && !username">未登录</font>
                 </form>
             </div>
@@ -126,23 +161,23 @@ export default defineComponent({
         <div id="QuickLinks">
             <img src="../../assets/images/separator.gif"/>
             <span>
-                <a href="/catalog/categories/BIRDS"> BIRDS </a>
+                <a href="/catalog/BIRDS"> BIRDS </a>
                 <img src="../../assets/images/separator.gif"/>
             </span>
             <span>
-                <a href="/catalog/categories/CATS"> CATS </a>
+                <a href="/catalog/CATS"> CATS </a>
                 <img src="../../assets/images/separator.gif"/>
             </span>
             <span>
-                <a href="/catalog/categories/DOGS"> DOGS </a>
+                <a href="/catalog/DOGS"> DOGS </a>
                 <img src="../../assets/images/separator.gif"/>
             </span>
             <span>
-                <a href="/catalog/categories/FISH"> FISH </a>
+                <a href="/catalog/FISH"> FISH </a>
                 <img src="../../assets/images/separator.gif"/>
             </span>
             <span>
-                <a href="/catalog/categories/REPTILES"> REPTILES </a>
+                <a href="/catalog/REPTILES"> REPTILES </a>
                 <img src="../../assets/images/separator.gif"/>
             </span>
             <!-- <a v-if="allCategoryLists.size == 0">No Categor</a>

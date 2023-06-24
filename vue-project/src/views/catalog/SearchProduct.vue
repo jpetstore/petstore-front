@@ -1,12 +1,32 @@
 <script>
-import {defineComponent} from 'vue';
 import HeaderComponent from '../common/header.vue';
 import FooterComponent from '../common/footer.vue';
+import $ from 'jquery';
+import axios from 'axios';
 
-export default({
-    name: "header",
-    components:{HeaderComponent,FooterComponent}
-})
+export default {
+    name: "search",
+    components : {
+    HeaderComponent,
+    FooterComponent
+    },
+    data() {
+        return {
+            products: [],
+        };
+    },
+    methods: {
+        toProduct(productId) {
+          this.$router.push('/catalog/product/'+productId);
+        }
+
+    },
+    created(){
+        const productsData = JSON.parse(this.$route.query.products || '[]');
+        this.products = productsData;
+        console.log(this.products);
+    }
+} 
 </script>
 
 <template>
@@ -21,19 +41,17 @@ export default({
     <div id="Catalog">
         <table>
             <tr>
-                <th>&nbsp;</th>
                 <th>Product ID</th>
+                <th>Category Id</th>
                 <th>Name</th>
+                <th>Description</th>
             </tr>
 
-            <tr v-for="product in products">
-                <td>
-                    <a th:href="@{viewProduct(productId=${product.productId},name=${product.name},categoryId=${product.categoryId},description=${product.description})}">
-                        <image th:src="${product.description}"/>
-                    </a>
-                </td>
-                <td> {{ product.id }} </td>
-                <td> {{ product.name }} </td>
+            <tr v-for="product in products.data" :key="product.productId">
+              <td> <a @click="toProduct(product.productId)">{{ product.productId }}</a> </td>
+                <td>{{ product.categoryId }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
             </tr>
         </table>
     </div>

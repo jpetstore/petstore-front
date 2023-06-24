@@ -19,6 +19,7 @@ export default {
       authCode: '',
       captchaImage: '',
       errorMessage: '',
+      authCode_Real : '',
       captchaLinkClicked: false,
       isPhoneLogin: false,
     };
@@ -33,35 +34,44 @@ export default {
         authCode: this.authCode,
       }
       console.log(data)
-      axios.defaults.withCredentials = true;
-      axios
-          .post('http://localhost:8090/account/login', {
-            id: this.id,
-            password: this.password,
-            authCode: this.authCode,
-          },{
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            }
-          })
-          .then(response => {
-            const data = response.data;
-            console.log(data)
-            if (data.code === 0) {
-              // 登录成功
-              // 在这里处理登录成功的逻辑
-              console.log('登录成功');
-              router.push({name:'main'})
-              console.log('登录成功');
-            } else {
-              // 登录失败
-              this.errorMessage = data.msg;
-            }
-          })
-          .catch(error => {
-            console.error(error);
-            this.errorMessage = '服务器异常';
-          });
+      console.log(this.authCode_Real)
+      if(this.authCode_Real === this.authCode){
+        axios.defaults.withCredentials = true;
+        axios
+            .post('http://localhost:8090/account/login', {
+              id: this.id,
+              password: this.password,
+            },{
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              }
+            })
+            .then(response => {
+              const data = response.data;
+              console.log(data)
+              if (data.status === 0) {
+                // 登录成功
+                // 在这里处理登录成功的逻辑
+                if(data.msg === '登录成功'){
+                  //跳转到主界面
+                  this.$router.push('/catalog/Main');
+                  //this.$router.push({ name: 'Main' });
+                }
+                else {
+                  this.errorMessage = data.message;
+                }
+              } else {
+                // 登录失败
+                this.errorMessage = data.message;
+              }
+            })
+            .catch(error => {
+              console.error(error);
+              this.errorMessage = '服务器异常';
+            });
+      }else{
+       this.errorMessage = '验证码错误'
+      }
     },
     loadCaptchaImage() {
       axios.defaults.withCredentials = true;
@@ -70,15 +80,24 @@ export default {
           .then(response => {
             const data = response.data;
             this.handleImageData(data)
-            console.log("sucess")
+            console.log("success")
           })
           .catch(error => {
             console.error(error);
           });
     },
+
     handleImageData(imageData) {
       const blob = new Blob([imageData], { type: 'image/jpeg' }); // 根据实际的图片类型进行设置
       this.captchaImage = URL.createObjectURL(blob);
+      axios.defaults.withCredentials = true;
+      axios
+          .get('http://localhost:8090/account/getAuthCode')
+          .then(response =>{
+            const data = response.data;
+            console.log(data)
+            this.authCode_Real = data.msg;
+          })
     },
     toggleLoginMethod() {
       this.isPhoneLogin = !this.isPhoneLogin;
@@ -92,7 +111,7 @@ export default {
           .then(response => {
             const data = response.data;
             this.handleImageData(data)
-            console.log("sucess")
+            console.log("success")
           })
           .catch(error => {
             console.error(error);
@@ -166,7 +185,7 @@ $('#confirmFGTPSWMAIL').click(function (){
             type    :"post",
             data    :serializeArray,
             success :function (data){
-                alert(data.msg);
+                alert(data);
 
                 if(data==="新密码已经发送至邮箱，请注意查收"){
                     console.log(data);

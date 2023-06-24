@@ -12,19 +12,20 @@ const router = createRouter({
                 next()
             }
         },
-        // {
-        //     path:'/catalog/test',
-        //     name:'test',
-        //     component : () => import('../views/catalog/test.vue'),
-        //     beforeEnter : (to, from, next) => {
-        //         document.querySelector('html').style.background = '#000'
-        //         next()
-        //     }
-        // },
+
         {
             path:'/catalog/SearchProduct',
             name:'searchProduct',
             component : () => import('../views/catalog/SearchProduct.vue'),
+            beforeEnter : (to, from, next) => {
+                document.querySelector('html').style.background = '#d6d9c5'
+                next()
+            }
+        },
+        {
+            path:'/catalog/Main',
+            name:'Main',
+            component : () => import('../views/catalog/Main.vue'),
             beforeEnter : (to, from, next) => {
                 document.querySelector('html').style.background = '#d6d9c5'
                 next()
@@ -78,24 +79,67 @@ const router = createRouter({
                 next()
             }
         },
-
-
-
-        {
-            path:'/catalog/SearchProduct',
-            name:'searchProduct',
-            component : () => import('../views/catalog/SearchProduct.vue'),
-            beforeEnter : (to, from, next) => {
-                document.querySelector('html').style.background = '#d6d9c5'
-                next()
-            }
-        },
         {
             path:'/catalog/product/:productId',
             name:'Product',
             component : () => import('../views/catalog/Product.vue'),
             beforeEnter : (to, from, next) => {
                 document.querySelector('html')!.style.background = '#d6d9c5'
+                next()
+            }
+        }
+        ,
+        {
+            path:'/order/OrderForm',
+            name:'OrderForm',
+            component : () => import('../views/order/OrderForm.vue'),
+            beforeEnter : (to, from, next) => {
+                document.querySelector('html')!.style.background = '#d6d9c5'
+                next()
+            }
+        },
+        {
+            path:'/order/ConfirmOrder',
+            name:'ConfirmOrder',
+            component : () => import('../views/order/ConfirmOrder.vue'),
+            beforeEnter : (to, from, next) => {
+                document.querySelector('html')!.style.background = '#d6d9c5'
+                next()
+            }
+        },
+        {
+            path:'/order/ViewOrder',
+            name:'ViewOrder',
+            component : () => import('../views/order/ViewOrder.vue'),
+            beforeEnter : (to, from, next) => {
+                document.querySelector('html')!.style.background = '#d6d9c5'
+                next()
+            }
+        },
+        {
+            path:'/cart',
+            name:'cart',
+            component : () => import('../views/cart/cart.vue'),
+            beforeEnter : (to, from, next) => {
+                document.querySelector('html').style.background = '#d6d9c5'
+                next()
+            }
+        },        {
+            path:'/catalog/:categoryId',
+            name:'category',
+            // @ts-ignore
+            component : () => import('../views/catalog/Category.vue'),
+            beforeEnter : (to, from, next) => {
+                document.querySelector('html').style.background = '#d6d9c5'
+                next()
+            }
+        },        {
+            path:'/catalog/item/:itemId',
+            name:'item',
+            // @ts-ignore
+            component : () => import('../views/catalog/Item.vue'),
+            beforeEnter : (to, from, next) => {
+                document.querySelector('html').style.background = '#d6d9c5'
                 next()
             }
         }

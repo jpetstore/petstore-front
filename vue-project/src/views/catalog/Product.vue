@@ -10,43 +10,35 @@ export default defineComponent({
     components:{ HeaderComponent, FooterComponent},
     data(){
         return{
-            itemlist    :   []
+            itemlist    :   [],
+            product     :   {}
         };
     },
     async created(){
-        console.log('created');
         var productId = this.$route.params.productId;
-        console.log(productId);
-        // this.fetchData(productId)
-        //     .then(()=>{
-        //     console.log('s');
-        // })
-        //     .catch(error=>{
-        //     console.error(error);
-        // });
-        // console.log(this.itemlist);
-        const re = await this.fetchData(productId);//promise对象
-        this.itemlist = re.data;
-        // console.log('0');
+        const re_itemls = await axios.get('http://localhost:8090/catalog/product/'+ productId + '/items');
+        const re_product = await axios.get('http://localhost:8090/catalog/product/'+ productId)
+        this.itemlist = re_itemls.data.data;
+        this.product = re_product.data.data;
     },
-    // mounted(){
-    //     console.log(this.itemlist);
-    //     console.log('1')
-    // }
     methods:{
-        async fetchData(id){
-            console.log(id)
-            try{
-                const response = await axios.get('http://localhost:8090/catalog/product/'+ id + '/items');
-                // console.log(response)
-                // console.log(response.data)
-                return response.data;
-            }catch(error){
-                console.log(error);
-                return 0;
+        async add_to_cart(item){
+            console.log('Got it:' + item.itemId)
+            const res_login_info = await axios.get('http://localhost:8090/account/get_loginUser_info')
+          console.log(res_login_info);
+            var is_login = res_login_info.data.status==0?true:false
+            if(is_login){
+                console.log('ADDED TO CART')
+                const resp = await axios.get('http://localhost:8090/cart/addItemToCart?workingItemId=' + item.itemId)
+                //修改路由
+                this.$router.push('/cart')
+            }else{
+                console.log('Sign in first')
+                //修改路由
+                this.$router.push('/catalog/main')
             }
         }
-    }   
+    }
 })
 
 
@@ -56,15 +48,17 @@ export default defineComponent({
 <template>
 <HeaderComponent />
 <div class = "body11">
-    <div id="BackLink">
-<!-- 
-<a th:text="'Return to'+ ${product.categoryId}" th:href="@{viewCategory(categoryId=${product.categoryId})}">错误提示product.categoryId}</a> -->
-
+    <!-- <div id="BackLink">
+ <a th:text="'Return to'+ ${product.categoryId}" th:href="@{viewCategory(categoryId=${product.categoryId})}">错误提示product.categoryId}</a>
+<a href="/catalog/" + product.categoryId >Return to {{ product.categoryId }}</a>
+</div> -->
+<div id="BackLink">
+    <router-link to="/catalog/main">Return to {{ product.categoryId }}</router-link>
 </div>
 <div id="Catalog">
 
-<!-- <h2>{{ product.name }}</h2> -->
-<!--    <a th:text="${product.productId}">??</a>-->
+<h2>{{ product.name }}</h2>
+   <!-- <a th:text="${product.productId}">??</a> -->
 <table>
     <thead>
         <tr>
@@ -108,7 +102,7 @@ export default defineComponent({
            {{ item.listPrice }}
         </td>
         <td>
-            <a class="Button" @click="{}">Add to Cart</a>
+            <a class="Button"  @click="add_to_cart(item)">Add to Cart</a>
         </td>
     </tr>
     </tbody>
@@ -119,7 +113,7 @@ export default defineComponent({
 </div>
 </div>
 
-    <FooterComponent />
+<FooterComponent />
 </template>
 
 <style scoped>
