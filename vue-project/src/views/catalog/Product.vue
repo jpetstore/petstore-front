@@ -22,6 +22,12 @@ export default defineComponent({
         this.product = re_product.data.data;
     },
     methods:{
+        viewItem(productId) {
+      // 导航到商品详情页面，并传递商品ID作为路由参数
+      //this.$router.push({ name: 'product', params: { id: productId } });
+
+      this.$router.push('/catalog/item/'+productId)
+    },
         async add_to_cart(item){
             console.log('Got it:' + item.itemId)
             const res_login_info = await axios.get('http://localhost:8090/account/get_loginUser_info')
@@ -72,7 +78,8 @@ export default defineComponent({
     <tbody>
         <tr v-for=" (item,index) in itemlist" >
         <td>
-            <router-link :to="{name : Main}">{{ item.itemId }}</router-link>
+           
+            <a @click="viewItem(item.itemId)">{{item.itemId}}</a>
 <!--                <a th:text="${product.productId}">??</a>-->
         </td>
         <td>
