@@ -78,7 +78,6 @@ export default defineComponent({
     <tbody>
         <tr v-for=" (item,index) in itemlist" >
         <td>
-           
             <a @click="viewItem(item.itemId)">{{item.itemId}}</a>
 <!--                <a th:text="${product.productId}">??</a>-->
         </td>

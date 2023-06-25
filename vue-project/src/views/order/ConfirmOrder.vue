@@ -19,17 +19,14 @@ export default defineComponent({
     this.order = re.data;
   },
   methods:{
-   async submitPay(event){
+    async submitPay(event){
       event.preventDefault();
       axios.post(" http://localhost:8090/order/finalOrder")
           .then(response => {
             console.log(response.data)
-            请求成功,显示返回的html
+            //请求成功,显示返回的html
             this.$router.push({
-              path: '/blank',
-              query: {
-                htmlContent: response.data
-              }
+              path: '/order/ViewOrder',
             });
           })
           .catch(error=>{

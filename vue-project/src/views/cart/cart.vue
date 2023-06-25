@@ -152,3 +152,6 @@ export default {
   }
 };
 </script>
+<style scoped>
+@import "@/assets/css/jpetstore.css";
+</style>

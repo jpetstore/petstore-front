@@ -87,7 +87,7 @@ export default {
       fetchItem() {
       const itemId = this.$route.params.itemId; // 获取路由参数中的商品ID
       axios.defaults.withCredentials = true;
-      const url = `http://localhost:8080/catalog/items/${itemId}`;
+      const url = `http://localhost:8090/catalog/items/${itemId}`;
       console.log(itemId)
       console.log(url)
       axios.get(url)
@@ -109,7 +109,7 @@ export default {
           });
     },
     fetchItemImage(productId) {
-      const url = `http://localhost:8080/catalog/showImage?productId=${productId}`;
+      const url = `http://localhost:8090/catalog/showImage?productId=${productId}`;
       axios
           .get(url, { responseType: 'blob' }) // 设置响应类型为 blob
           .then(response => {
@@ -132,7 +132,7 @@ export default {
       };
       console.log(itemId)
       axios.defaults.withCredentials = true;
-      axios.get('http://localhost:8080/cart/addItemToCart', {params: payload})
+      axios.get('http://localhost:8090/cart/addItemToCart', {params: payload})
           .then(response => {
             const data = response.data;
             if (data.status === 0) {
